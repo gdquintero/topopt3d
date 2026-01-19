@@ -1,8 +1,9 @@
-import numpy as np
+from numpy import zeros
+from numpy import array
 
 def getABC(X, Y, A):
-    a = np.zeros(3)
-    b = np.zeros(3)
+    a = zeros(3)
+    b = zeros(3)
     
     a[0] = 1/(2*A) *(X[1]*Y[2] - X[2]*Y[1])
     a[1] = 1/(2*A) *(X[2]*Y[0] - X[0]*Y[2])
@@ -52,7 +53,7 @@ def getK(a, b, A, E, v, tck):
     K56 = (-a3*b3*A*E*tck)/d2
 
     
-    K = np.array([
+    K = array([
         [K11, K12, K13, K14, K15, K16],
         [K12, K22, K23, K24, K25, K26],
         [K13, K23, K33, K34, K35, K36],
