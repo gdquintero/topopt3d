@@ -1,10 +1,6 @@
 from numpy import zeros
 from numpy import array
 from numpy import concatenate
-import pandas as pd
-
-struct = pd.read_json("./python/triangularElements/struct3x3.json")
-
 
 def get_rows_cols(struct):
     ny = int(struct.nnodesy)
@@ -123,5 +119,3 @@ def get_rows_cols(struct):
     
     
     return (row, col, inic)
-
-print(get_rows_cols(struct))
