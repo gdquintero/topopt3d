@@ -1,5 +1,6 @@
 from numpy import zeros
 from numpy import array
+from numpy import concatenate
 import pandas as pd
 
 struct = pd.read_json("./python/triangularElements/struct3x3.json")
@@ -24,19 +25,32 @@ def get_rows_cols(struct):
     col[inic[0] : inic[1]] = 1 
     col[inic[1]: inic[2]] = 2
 
+    row[inic[0] : inic[1]] = 2 + concatenate((atu[2:], pro[2:]))
+    row[inic[1] : inic[2]] = 2 + concatenate((atu[2:], pro[2:]))
+
+    
     for i in range(1, ny -1 ):
         nel = 10
         inic[2*i + 1] = inic[2*i] + nel
         inic[2*(i+1)] = inic[2*i + 1] + nel
+        
         col[inic[2*i] : inic[2*i + 1]] = 2*i + 1
         col[inic[2*i + 1] : inic[2*(i+1)] ] = 2*i + 2
+        
+        row[inic[2*i] : inic[2*i + 1]] = 2*i + 2 + concatenate((atu, pro[2:]))
+        row[inic[2*i + 1] : inic[2*i + 2]] = 2*i + 2 + concatenate((atu, pro[2:]))
 
     nel = 6
     inic[2*( ny - 1) + 1]  = inic[2*(ny - 1)] + nel 
     inic[2*(ny - 1) + 2] = inic[2*(ny - 1) + 1] + nel
+    
     col[inic[2*(ny - 1)] : inic[2*( ny - 1) + 1] ] = 2*(ny - 1) + 1
     col[inic[2*( ny - 1) + 1] : inic[2*( ny - 1) + 2] ] = 2*(ny - 1) + 2
     
+    row[inic[2*(ny - 1)] : inic[2*( ny - 1) + 1]] = 2*(ny - 1) + 2 + concatenate((atu[0:4], pro[2:4]))
+    row[inic[2*(ny - 1) + 1] : inic[2*( ny - 1) + 2]] = 2*(ny - 1) + 2 + concatenate((atu[0:4], pro[2:4]))
+    
+
     #linea de en medio 
     for i in range(1, nx - 1):
         nel = 10
@@ -46,20 +60,32 @@ def get_rows_cols(struct):
         col[inic[2*(i*ny + 1) - 2] : inic[2*(i*ny + 1) - 1] ] = 2*(i*ny + 1) - 1
         col[inic[2*(i*ny + 1) - 1] : inic[2*(i*ny + 1)] ] = 2*(i*ny + 1) 
         
+        row[inic[2*(i*ny + 1) - 2] : inic[2*(i*ny + 1) - 1] ] = 2*(i*ny + 1) + concatenate((ant[2:4], atu[2:], pro[2:]))  
+        row[inic[2*(i*ny + 1) - 1] : inic[2*(i*ny + 1)] ] = 2*(i*ny + 1) + concatenate((ant[2:4], atu[2:], pro[2:]))
+        
+
         for j in range(1, ny - 1):
             nel = 14
             inic[2*(i*ny + 1 + j) - 1] = inic[2*(i*ny + 1 + j) - 2] + nel
             inic[2*(i*ny + 1 + j)] = inic[2*(i*ny + 1 + j) - 1] + nel
             
             col[inic[2*(i*ny + 1 + j) - 2] : inic[2*(i*ny + 1 + j) - 1]] = 2*(i*ny + 1 + j) - 1
-            col[inic[2*(i*ny + 1 + j) - 1] : inic[2*(i*ny + 1 + j) ]] = 2*(i*ny + 1 + j) 
-        
+            col[inic[2*(i*ny + 1 + j) - 1] : inic[2*(i*ny + 1 + j) ]] = 2*(i*ny + 1 + j)
+            
+            row[inic[2*(i*ny + 1 + j) - 2] : inic[2*(i*ny + 1 + j) - 1]] = 2*(i*ny + 1 + j) + concatenate((ant[0:4], atu, pro[0:4]))
+            row[inic[2*(i*ny + 1 + j) - 1] : inic[2*(i*ny + 1 + j) ]] = 2*(i*ny + 1 + j) + concatenate((ant[0:4], atu, pro[0:4]))
+
+              
         nel = 10
         inic[2*ny*(i + 1) - 1] = inic[2*ny*(i + 1) - 2] + nel
         inic[2*ny*(i + 1)] = inic[2*ny*(i + 1) - 1] + nel
         col[inic[2*ny*(i + 1) - 2] : inic[2*ny*(i + 1) - 1] ] = 2*ny*(i + 1) - 1 
-        col[inic[2*ny*(i + 1) - 1] : inic[2*ny*(i + 1)] ] = 2*ny*(i + 1) 
+        col[inic[2*ny*(i + 1) - 1] : inic[2*ny*(i + 1)] ] = 2*ny*(i + 1)
+
+        row[inic[2*ny*(i + 1) - 2] : inic[2*ny*(i + 1) - 1] ] = 2*ny*(i + 1) + concatenate((ant[0:4], atu[0:4], pro[2:4])) 
+        row[inic[2*ny*(i + 1) - 1] : inic[2*ny*(i + 1)] ] = 2*ny*(i + 1) + concatenate((ant[0:4], atu[0:4], pro[2:4]))
         
+    
     #Linea finall
     nel = 6
     inic[2*(ny*(nx - 1) + 1) - 1] = inic[2*(ny*(nx - 1) + 1) - 2] + nel
@@ -67,20 +93,35 @@ def get_rows_cols(struct):
 
     col[inic[2*(ny*(nx - 1) + 1) - 2] : inic[2*(ny*(nx - 1) + 1) - 1] ] = 2*(ny*(nx - 1) + 1) - 1
     col[inic[2*(ny*(nx - 1) + 1) - 1] : inic[2*(ny*(nx - 1) + 1)] ] = 2*(ny*(nx - 1) + 1) 
+    
+    row[inic[2*(ny*(nx - 1) + 1) - 2] : inic[2*(ny*(nx - 1) + 1) - 1] ] = 2*(ny*(nx - 1) + 1) + concatenate((ant[2:4], atu[2:]))
+    row[inic[2*(ny*(nx - 1) + 1) - 1] : inic[2*(ny*(nx - 1) + 1)] ] = 2*(ny*(nx - 1) + 1) + + concatenate((ant[2:4], atu[2:]))
+
 
     for i in range(1, ny - 1):
         nel = 10
         inic[2*(ny*(nx - 1) + 1 + i) - 1] = inic[2*(ny*(nx - 1) + 1 + i) - 2] + nel 
         inic[2*(ny*(nx - 1) + 1 + i)] = inic[2*(ny*(nx - 1) + 1 + i) - 1] + nel
+
         col[inic[2*(ny*(nx - 1) + 1 + i) - 2] : inic[2*(ny*(nx - 1) + 1 + i) - 1] ] = 2*(ny*(nx - 1) + 1 + i) - 1 
         col[inic[2*(ny*(nx - 1) + 1 + i) - 1] : inic[2*(ny*(nx - 1) + 1 + i)] ] = 2*(ny*(nx - 1) + 1 + i)
+
+        row[inic[2*(ny*(nx - 1) + 1 + i) - 2] : inic[2*(ny*(nx - 1) + 1 + i) - 1] ] = 2*(ny*(nx - 1) + 1 + i) + concatenate((ant[0:4], atu)) 
+        row[inic[2*(ny*(nx - 1) + 1 + i) - 1] : inic[2*(ny*(nx - 1) + 1 + i)] ] = 2*(ny*(nx - 1) + 1 + i) + concatenate((ant[0:4], atu))
+
+
 
     nel = 8
     inic[2*(ny*(nx - 1) + 1 + ny - 1) - 1] = inic[2*(ny*(nx - 1) + 1 + ny - 1) - 2] + nel 
     inic[2*(ny*(nx - 1) + 1 + ny - 1)] = inic[2*(ny*(nx - 1) + 1 + ny - 1) - 1] + nel
+
     col[inic[2*(ny*(nx - 1) + 1 + ny - 1) - 2] : inic[2*(ny*(nx - 1) + 1 + ny - 1) - 1] ] = 2*(ny*(nx - 1) + 1 + ny - 1) - 1 
     col[inic[2*(ny*(nx - 1) + 1 + ny - 1) - 1] : inic[2*(ny*(nx - 1) + 1 + ny - 1)] ] = 2*(ny*(nx - 1) + 1 + ny - 1)
-    print(inic, col.shape)
-    return col
+
+    row[inic[2*(ny*(nx - 1) + 1 + ny - 1) - 2] : inic[2*(ny*(nx - 1) + 1 + ny - 1) - 1] ] = 2*(ny*(nx - 1) + 1 + ny - 1) + concatenate((ant[0:4], atu[0:4])) 
+    row[inic[2*(ny*(nx - 1) + 1 + ny - 1) - 1] : inic[2*(ny*(nx - 1) + 1 + ny - 1)] ] = 2*(ny*(nx - 1) + 1 + ny - 1) + concatenate((ant[0:4], atu[0:4]))
+    
+    
+    return (row, col, inic)
 
 print(get_rows_cols(struct))
