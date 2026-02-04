@@ -1,12 +1,12 @@
 import pandas as pd
 import numpy as np
 
-nelemx = 5
-nelemy = 4
-nnodesx = 6
-nnodesy = 5
-nelem = 20
-nodes = 30
+nelemx = 3
+nelemy = 3
+nnodesx = 4
+nnodesy = 4
+nelem = 9
+nodes = 16
 
 groups = 4 + (nelemy - 1) * 2
 
