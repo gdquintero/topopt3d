@@ -1,8 +1,9 @@
-I = eye(66);
+nodes = 30;
+I = eye(nodes * 2);
 nele = 20;
-ny = 11;
+ny = 5;
 k = ny - 1;
-K = zeros(66,66);
+K = zeros(nodes*2,nodes*2);
 Ke = [1 1 1 1 1 1 1 1;2 2 2 2 2 2 2 2;3 3 3 3 3 3 3 3;4 4 4 4 4 4 4 4;5 5 5 5 5 5 5 5;6 6 6 6 6 6 6 6;7 7 7 7 7 7 7 7;8 8 8 8 8 8 8 8];
 for i = 1:nele
     node = (floor((i-1)/k))*ny+mod(i-1,k)+1; 
