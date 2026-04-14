@@ -68,8 +68,8 @@ def get_rows_cols(struct):
             col[inic[2*(i*ny + 1 + j) - 2] : inic[2*(i*ny + 1 + j) - 1]] = 2*(i*ny + 1 + j) - 1
             col[inic[2*(i*ny + 1 + j) - 1] : inic[2*(i*ny + 1 + j) ]] = 2*(i*ny + 1 + j)
             
-            row[inic[2*(i*ny + 1 + j) - 2] : inic[2*(i*ny + 1 + j) - 1]] = 2*(i*ny + 1 + j) + concatenate((ant[0:4], atu, pro[0:4]))
-            row[inic[2*(i*ny + 1 + j) - 1] : inic[2*(i*ny + 1 + j) ]] = 2*(i*ny + 1 + j) + concatenate((ant[0:4], atu, pro[0:4]))
+            row[inic[2*(i*ny + 1 + j) - 2] : inic[2*(i*ny + 1 + j) - 1]] = 2*(i*ny + 1 + j) + concatenate((ant[0:4], atu, pro[2:]))
+            row[inic[2*(i*ny + 1 + j) - 1] : inic[2*(i*ny + 1 + j) ]] = 2*(i*ny + 1 + j) + concatenate((ant[0:4], atu, pro[2:]))
 
               
         nel = 10
