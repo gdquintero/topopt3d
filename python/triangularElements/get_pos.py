@@ -1,10 +1,10 @@
 import numpy as np
 import pandas as pd
 from get_rows_cols import get_rows_cols
-struct = pd.read_json("./python/triangularElements/struct3x3.json")
+# struct = pd.read_json("./python/triangularElements/struct3x3.json")
 
-np.set_printoptions(threshold=np.inf)
-(row, col, inic) = get_rows_cols(struct)
+# np.set_printoptions(threshold=np.inf)
+# (row, col, inic) = get_rows_cols(struct)
 # print(inic)
 def get_pos(struct, inic):
     nelem = int(struct.nelem)
@@ -49,53 +49,67 @@ def get_pos(struct, inic):
                                              inic[2*(i + nodesy)] + oind1, inic[2*(i + nodesy) + 1] + oind1 ))
    
    
-    pos[nelemy - 2, :] = np.concatenate((inic[2*(nelemy - 4)] + oind3, inic[2*(nelemy - 4) + 1] + oind3,
-                                        inic[2*(nelemy + nodesy - 4)] + oind3, inic[2*(nelemy + nodesy - 4) + 1] + oind3,
-                                        inic[2*(nelemy + nodesy - 3)]+ oind1, inic[2*(nelemy + nodesy - 3) + 1] + oind1))
+    pos[nelemy - 2, :] = np.concatenate((inic[2*(nodesy - 2)] + oind3, inic[2*(nodesy - 2) + 1] + oind3,
+                                        inic[2*((nodesy - 2) + nodesy)] + oind3, inic[2*((nodesy - 2) + nodesy) + 1] + oind3,
+                                        inic[2*((nodesy - 2) + nodesy  + 1)]+ oind1, inic[2*((nodesy - 2) + nodesy + 1) + 1] + oind1))
     
-    pos[nelemy - 1, :] = np.concatenate((inic[2*(nelemy - 4)] + eind2, inic[2*(nelemy - 4) + 1] + eind2,
-                                        inic[2*(nelemy + nodesy - 3)]+ eind1, inic[2*(nelemy + nodesy - 3) + 1] + eind1, 
-                                        inic[2*(nelemy - 3)] + eind3, inic[2*(nelemy - 3) + 1] + eind3))
+    pos[nelemy - 1, :] = np.concatenate((inic[2*(nodesy - 2)] + eind2, inic[2*(nodesy - 2) + 1] + eind2,
+                                        inic[2*((nodesy - 2) + nodesy + 1)]+ eind1, inic[2*((nodesy - 2) + nodesy  + 1) + 1] + eind1, 
+                                        inic[2*(nodesy - 1) ] + eind3, inic[2*(nodesy - 1) + 1] + eind3))
     
     #Columnas de enmedio
     
-    for i in range(1, nodesx - 2):
+    for i in range(1, nodesx - 1):
         
         pos[i*nelemy, :] = np.concatenate((inic[2*(i*nodesy)] + oind3, inic[2*(i*nodesy) + 1] + oind3,
                                         inic[2*(i*nodesy + nodesy)] + oind2, inic[2*(i*nodesy + nodesy) + 1] + oind2, 
                                         inic[2*(i*nodesy + nodesy + 1)] + oind1, inic[2*(i*nodesy + nodesy + 1) + 1] + oind1))
         
+        pos[i*nelemy + 1, : ] = np.concatenate((inic[2*(i*nodesy)] + eind2, inic[2*(i*nodesy) + 1] + eind2, 
+                                                 inic[2*(i*nodesy + nodesy + 1)] + eind1, inic[2*(i*nodesy + nodesy + 1) + 1] + eind1,
+                                                 inic[2*(i*nodesy + 1)] + eind4, inic[2*(i*nodesy + 1) + 1] + eind4))
         
         for j in range(2, nelemy - 3):
 
             pos[i*nelemy + 2*(j-1)] = np.concatenate((inic[2*(i*nodesy + (j-1))] + oind4, inic[2*(i*nodesy + (j-1)) + 1 ] + oind4,
                                         inic[2*(i*nodesy + nodesy + (j-1))] + oind3, inic[2*(i*nodesy + nodesy + (j-1)) + 1 ] + oind3, 
                                         inic[2*(i*nodesy + nodesy + 1 + (j-1))] + oind1, inic[2*(i*nodesy + nodesy + 1 + (j-1)) + 1] + oind1))
+            
+            pos[i*nelemy + 2*(j-1) + 1] = np.concatenate((inic[2*(i*nodesy + (j-1))] + eind5, inic[2*(i*nodesy + (j-1)) + 1 ] + eind5,
+                                        inic[2*(i*nodesy + nodesy + 1 + (j-1))] + eind1, inic[2*(i*nodesy + nodesy + 1 + (j-1)) + 1] + eind1, 
+                                        inic[2*(i*nodesy + (j-1) + 1)] + eind4, inic[2*(i*nodesy + (j-1)  + 1) + 1 ] + eind4))
         
         
-        pos[i*nelemy + nelemy - 2] = np.concatenate((inic[2*(i*nodesy + (nelemy - 5))] + oind4, inic[2*(i*nodesy + (nelemy - 5)) + 1 ] + oind4,
-                                        inic[2*(i*nodesy + nodesy + (nelemy - 5))] + oind3, inic[2*(i*nodesy + nodesy + (nelemy - 5)) + 1 ] + oind3, 
-                                        inic[2*(i*nodesy + nodesy + 1 + (nelemy - 5))] + oind1, inic[2*(i*nodesy + nodesy + 1 + (nelemy - 5)) + 1] + oind1))
-    
-    
+        pos[i*nelemy + nelemy - 2] = np.concatenate((inic[2*(i*nodesy + (nodesy - 2))] + oind4, inic[2*(i*nodesy + (nodesy - 2)) + 1 ] + oind4,
+                                        inic[2*(i*nodesy + nodesy + (nodesy - 2))] + oind3, inic[2*(i*nodesy + nodesy + (nodesy - 2)) + 1 ] + oind3, 
+                                        inic[2*(i*nodesy + nodesy + 1 + (nodesy - 2))] + oind1, inic[2*(i*nodesy + nodesy + 1 + (nodesy - 2)) + 1] + oind1))
+        
+        pos[i*nelemy + nelemy - 1] = np.concatenate((inic[2*(i*nodesy + (nodesy - 2))] + eind5, inic[2*(i*nodesy + (nodesy - 2)) + 1 ] + eind5,
+                                        inic[2*(i*nodesy + nodesy + 1 + (nodesy - 2))] + eind1, inic[2*(i*nodesy + nodesy + 1 + (nodesy - 2)) + 1] + eind1,
+                                        inic[2*(i*nodesy + (nodesy - 2) + 1)] + eind6, inic[2*(i*nodesy + (nodesy - 2) + 1) + 1 ] + eind6))
+        
     #Columna final
-    pos[(nodesx - 2)*nelemy, :] = np.concatenate((inic[2*((nodesx - 2)*nodesy)] + oind3, inic[2*((nodesx - 2)*nodesy) + 1] + oind3,
-                                        inic[2*((nodesx - 2)*nodesy + nodesy)] + oind2, inic[2*((nodesx - 2)*nodesy + nodesy) + 1] + oind2, 
-                                        inic[2*((nodesx - 2)*nodesy + nodesy + 1)] + oind1, inic[2*((nodesx - 2)*nodesy + nodesy + 1) + 1] + oind1))
+    # pos[(nodesx - 2)*nelemy, :] = np.concatenate((inic[2*((nodesx - 2)*nodesy)] + oind3, inic[2*((nodesx - 2)*nodesy) + 1] + oind3,
+    #                                     inic[2*((nodesx - 2)*nodesy + nodesy)] + oind2, inic[2*((nodesx - 2)*nodesy + nodesy) + 1] + oind2, 
+    #                                     inic[2*((nodesx - 2)*nodesy + nodesy + 1)] + oind1, inic[2*((nodesx - 2)*nodesy + nodesy + 1) + 1] + oind1))
+    
+    # pos[(nodesx - 2)*nelemy + 1, :] = np.concatenate((inic[2*((nodesx - 2)*nodesy)] + eind2, inic[2*((nodesx - 2)*nodesy) + 1] + eind2,
+    #                                     inic[2*((nodesx - 2)*nodesy + nodesy + 1)] + eind1, inic[2*((nodesx - 2)*nodesy + nodesy + 1) + 1] + eind1,
+    #                                     inic[2*((nodesx - 2)*nodesy + 1)] + eind4, inic[2*((nodesx - 2)*nodesy + 1) + 1] + eind4))
         
         
-    for j in range(2, nelemy - 3):
+    # for j in range(2, nelemy - 3):
 
-        pos[(nodesx - 2)*nelemy + 2*(j-1)] = np.concatenate((inic[2*((nodesx - 2)*nodesy + (j-1))] + oind4, inic[2*((nodesx - 2)*nodesy + (j-1)) + 1 ] + oind4,
-                                        inic[2*((nodesx - 2)*nodesy + nodesy + (j-1))] + oind3, inic[2*((nodesx - 2)*nodesy + nodesy + (j-1)) + 1 ] + oind3, 
-                                        inic[2*((nodesx - 2)*nodesy + nodesy + 1 + (j-1))] + oind1, inic[2*((nodesx - 2)*nodesy + nodesy + 1 + (j-1)) + 1] + oind1))
+    #     pos[(nodesx - 2)*nelemy + 2*(j-1)] = np.concatenate((inic[2*((nodesx - 2)*nodesy + (j-1))] + oind4, inic[2*((nodesx - 2)*nodesy + (j-1)) + 1 ] + oind4,
+    #                                     inic[2*((nodesx - 2)*nodesy + nodesy + (j-1))] + oind3, inic[2*((nodesx - 2)*nodesy + nodesy + (j-1)) + 1 ] + oind3, 
+    #                                     inic[2*((nodesx - 2)*nodesy + nodesy + 1 + (j-1))] + oind1, inic[2*((nodesx - 2)*nodesy + nodesy + 1 + (j-1)) + 1] + oind1))
         
         
-    pos[(nodesx - 2)*nelemy + nelemy - 2] = np.concatenate((inic[2*((nodesx - 2)*nodesy + (nelemy - 5))] + oind4, inic[2*((nodesx - 2)*nodesy + (nelemy - 5)) + 1 ] + oind4,
-                                        inic[2*((nodesx - 2)*nodesy + nodesy + (nelemy - 5))] + oind3, inic[2*((nodesx - 2)*nodesy + nodesy + (nelemy - 5)) + 1 ] + oind3, 
-                                        inic[2*((nodesx - 2)*nodesy + nodesy + 1 + (nelemy - 5))] + oind1, inic[2*((nodesx - 2)*nodesy + nodesy + 1 + (nelemy - 5)) + 1] + oind1))
+    # pos[(nodesx - 2)*nelemy + nelemy - 2] = np.concatenate((inic[2*((nodesx - 2)*nodesy + (nodesy - 2))] + oind4, inic[2*((nodesx - 2)*nodesy + (nodesy - 2)) + 1 ] + oind4,
+    #                                     inic[2*((nodesx - 2)*nodesy + nodesy + (nodesy - 2))] + oind3, inic[2*((nodesx - 2)*nodesy + nodesy + (nodesy - 2)) + 1 ] + oind3, 
+    #                                     inic[2*((nodesx - 2)*nodesy + nodesy + 1 + (nodesy - 2))] + oind1, inic[2*((nodesx - 2)*nodesy + nodesy + 1 + (nodesy - 2)) + 1] + oind1))
     # pos[]     
     
     return pos
 
-print(get_pos(struct , inic))
+# print(get_pos(struct , inic))
