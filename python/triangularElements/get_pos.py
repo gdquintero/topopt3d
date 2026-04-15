@@ -88,27 +88,6 @@ def get_pos(struct, inic):
                                         inic[2*(i*nodesy + nodesy + 1 + (nodesy - 2))] + eind1, inic[2*(i*nodesy + nodesy + 1 + (nodesy - 2)) + 1] + eind1,
                                         inic[2*(i*nodesy + (nodesy - 2) + 1)] + eind6, inic[2*(i*nodesy + (nodesy - 2) + 1) + 1 ] + eind6))
         
-    #Columna final
-    # pos[(nodesx - 2)*nelemy, :] = np.concatenate((inic[2*((nodesx - 2)*nodesy)] + oind3, inic[2*((nodesx - 2)*nodesy) + 1] + oind3,
-    #                                     inic[2*((nodesx - 2)*nodesy + nodesy)] + oind2, inic[2*((nodesx - 2)*nodesy + nodesy) + 1] + oind2, 
-    #                                     inic[2*((nodesx - 2)*nodesy + nodesy + 1)] + oind1, inic[2*((nodesx - 2)*nodesy + nodesy + 1) + 1] + oind1))
-    
-    # pos[(nodesx - 2)*nelemy + 1, :] = np.concatenate((inic[2*((nodesx - 2)*nodesy)] + eind2, inic[2*((nodesx - 2)*nodesy) + 1] + eind2,
-    #                                     inic[2*((nodesx - 2)*nodesy + nodesy + 1)] + eind1, inic[2*((nodesx - 2)*nodesy + nodesy + 1) + 1] + eind1,
-    #                                     inic[2*((nodesx - 2)*nodesy + 1)] + eind4, inic[2*((nodesx - 2)*nodesy + 1) + 1] + eind4))
-        
-        
-    # for j in range(2, nelemy - 3):
-
-    #     pos[(nodesx - 2)*nelemy + 2*(j-1)] = np.concatenate((inic[2*((nodesx - 2)*nodesy + (j-1))] + oind4, inic[2*((nodesx - 2)*nodesy + (j-1)) + 1 ] + oind4,
-    #                                     inic[2*((nodesx - 2)*nodesy + nodesy + (j-1))] + oind3, inic[2*((nodesx - 2)*nodesy + nodesy + (j-1)) + 1 ] + oind3, 
-    #                                     inic[2*((nodesx - 2)*nodesy + nodesy + 1 + (j-1))] + oind1, inic[2*((nodesx - 2)*nodesy + nodesy + 1 + (j-1)) + 1] + oind1))
-        
-        
-    # pos[(nodesx - 2)*nelemy + nelemy - 2] = np.concatenate((inic[2*((nodesx - 2)*nodesy + (nodesy - 2))] + oind4, inic[2*((nodesx - 2)*nodesy + (nodesy - 2)) + 1 ] + oind4,
-    #                                     inic[2*((nodesx - 2)*nodesy + nodesy + (nodesy - 2))] + oind3, inic[2*((nodesx - 2)*nodesy + nodesy + (nodesy - 2)) + 1 ] + oind3, 
-    #                                     inic[2*((nodesx - 2)*nodesy + nodesy + 1 + (nodesy - 2))] + oind1, inic[2*((nodesx - 2)*nodesy + nodesy + 1 + (nodesy - 2)) + 1] + oind1))
-    # pos[]     
     
     return pos
 
