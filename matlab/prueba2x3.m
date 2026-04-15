@@ -1,3 +1,4 @@
+
 I = eye(50);
 nele = 16;
 ny = 5;
@@ -5,6 +6,7 @@ k = ny - 1;
 K1 = zeros(50,50);
 K2 = zeros(50,50);
 Ke = [1 1 1 1 1 1;2 2 2 2 2 2 ;3 3 3 3 3 3;4 4 4 4 4 4;5 5 5 5 5 5;6 6 6 6 6 6];
+
 for i = 1:nele
     node = (floor((i-1)/k))*ny+mod(i-1,k)+1;
     P1 = [I(:, 2*node - 1), I(:, 2*node), I(:, 2*(node + ny) - 1 ),  I(:, 2*(node + ny)), I(:, 2*(node + ny + 1) - 1), I(:, 2*(node + ny + 1)) ];
