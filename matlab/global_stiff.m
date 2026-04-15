@@ -43,7 +43,7 @@ kk = zeros(inic(2*nndes+1),1);
 
 kk(pos(:,1)) = kk(pos(:,1)) + (x(1)^p)*kelc;
 
-K1 = sparse(row,col,kk);
+% K1 = sparse(row,col,kk);
 
 
 for i = 2:nely-1
@@ -52,7 +52,7 @@ end
 
 kk(pos(:,nely)) = kk(pos(:,nely)) + (x(nely)^p)*kelc;
 
-K2 = sparse(row,col,kk);
+% K2 = sparse(row,col,kk);
 
 %**************************************************************************
 %Obtaining the global stiffness matrix columns associated to the

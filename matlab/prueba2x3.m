@@ -19,6 +19,8 @@ end
 
 % spy(K2);
 
-xlswrite("KOtrian5x5.xlsx", K1)
-xlswrite("KEtrian5x5.xlsx", K2)
-xlswrite("Ktrian5x5.xlsx", K1 + K2);
+% xlswrite("KOtrian5x5.xlsx", K1)
+% xlswrite("KEtrian5x5.xlsx", K2)
+% xlswrite("Ktrian5x5.xlsx", K1 + K2);
+
+spy(K1 + K2)
