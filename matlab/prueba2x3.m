@@ -1,18 +1,24 @@
 
-I = eye(50);
-nele = 16;
+I = eye(60);
+nele = 20;
 ny = 5;
 k = ny - 1;
 K1 = zeros(50,50);
 K2 = zeros(50,50);
+K = zeros(60, 60);
 Ke = [1 1 1 1 1 1;2 2 2 2 2 2 ;3 3 3 3 3 3;4 4 4 4 4 4;5 5 5 5 5 5;6 6 6 6 6 6];
-
+KeRec = ones(8);
 for i = 1:nele
     node = (floor((i-1)/k))*ny+mod(i-1,k)+1;
-    P1 = [I(:, 2*node - 1), I(:, 2*node), I(:, 2*(node + ny) - 1 ),  I(:, 2*(node + ny)), I(:, 2*(node + ny + 1) - 1), I(:, 2*(node + ny + 1)) ];
-    P2 = [I(:, 2*node - 1), I(:, 2*node), I(:, 2*(node + ny + 1) - 1), I(:, 2*(node + ny + 1)),I(:, 2*(node + 1) - 1), I(:, 2*(node + 1))];
-    K1 = K1  + P1*Ke*P1';
-    K2 = K2  + P2*Ke*P2';
+    % P1 = [I(:, 2*node - 1), I(:, 2*node), I(:, 2*(node + ny) - 1 ),  I(:, 2*(node + ny)), I(:, 2*(node + ny + 1) - 1), I(:, 2*(node + ny + 1)) ];
+    % P2 = [I(:, 2*node - 1), I(:, 2*node), I(:, 2*(node + ny + 1) - 1), I(:, 2*(node + ny + 1)),I(:, 2*(node + 1) - 1), I(:, 2*(node + 1))];
+
+    P = [I(:, 2*node - 1), I(:, 2*node), I(:, 2*(node + 1) - 1), I(:, 2*(node + 1)), I(:, 2*(node + ny) - 1 ),  I(:, 2*(node + ny)), I(:, 2*(node + ny + 1) - 1), I(:, 2*(node + ny + 1))];
+    
+    % K1 = K1  + P1*Ke*P1';
+    % K2 = K2  + P2*Ke*P2';
+
+    K = K + P*KeRec*P';
 end
 
 % disp(K);
@@ -21,8 +27,11 @@ end
 
 % spy(K2);
 
+spy(K)
+xlswrite("Krec5x4.xlsx", K)
+
 % xlswrite("KOtrian5x5.xlsx", K1)
 % xlswrite("KEtrian5x5.xlsx", K2)
 % xlswrite("Ktrian5x5.xlsx", K1 + K2);
 
-spy(K1 + K2)
+% spy(K1 + K2)
