@@ -23,9 +23,9 @@ def global_stiff(struct, density, penal, row, col, inic, kel, pos):
         kk[pos[ i*nelemy , :]] +=  density[i*nelemy]**penal * kel
 
         for j in range(1, nelemy - 1):
-            kk[pos[i*nelemy + j]] = density[i*nelemy + j]**penal * kel
+            kk[pos[i*nelemy + j]] += density[i*nelemy + j]**penal * kel
         
-        kk[pos[i*nelemy + nelemy - 1]] = density[i*nelemy + nelemy - 1]**penal * kel
+        kk[pos[i*nelemy + nelemy - 1]] += density[i*nelemy + nelemy - 1]**penal * kel
         
 
     K = csr_matrix((kk, (row, col)), shape = (2*nnodes, 2*nnodes))

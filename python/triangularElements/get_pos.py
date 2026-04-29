@@ -38,7 +38,7 @@ def get_pos(struct, inic):
                                 inic[2*(nodesy + 2) - 2] + eind1, inic[2*(nodesy + 2) - 1] + eind1,
                                 inic[2] + eind1, inic[3] + eind1))
 
-    for i in range(2, nelemy - 3):
+    for i in range(2, int(nelemy/2)):
         
         pos[2*(i-1) + 1, :] = np.concatenate((inic[2*(i-1)] + eind2, inic[2*(i-1) + 1] + eind2, 
                                             inic[2*(i + nodesy)] + eind1, inic[2*(i + nodesy) + 1] + eind1, 
@@ -69,7 +69,7 @@ def get_pos(struct, inic):
                                                  inic[2*(i*nodesy + nodesy + 1)] + eind1, inic[2*(i*nodesy + nodesy + 1) + 1] + eind1,
                                                  inic[2*(i*nodesy + 1)] + eind4, inic[2*(i*nodesy + 1) + 1] + eind4))
         
-        for j in range(2, nelemy - 3):
+        for j in range(2, int(nelemy/2)):
 
             pos[i*nelemy + 2*(j-1)] = np.concatenate((inic[2*(i*nodesy + (j-1))] + oind4, inic[2*(i*nodesy + (j-1)) + 1 ] + oind4,
                                         inic[2*(i*nodesy + nodesy + (j-1))] + oind3, inic[2*(i*nodesy + nodesy + (j-1)) + 1 ] + oind3, 
