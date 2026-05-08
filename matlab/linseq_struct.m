@@ -196,7 +196,7 @@ while ( (gpnorm > tol) && (count < tolcount) && (iter <= maxit) )
          %Tangent step:
          sn = zeros(n,1);
          %[s,fval,flagtg,~,lambda] = linprog(df0dx,[],[],A,-b,sL,sU,sn,lpoptions);    
-         [s,fval,flagtg,~,lambda] = linprog(df0dx,[],[],A,0,sL,sU,sn,lpoptions);    
+         [s,fval,flagtg,~,lambda] = linprog(df0dx,[],[],A,0,sL,sU,lpoptions);    
          if (flagtg == 1)
             flagn = 0;
          else

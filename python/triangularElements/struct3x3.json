@@ -1,10 +1,10 @@
 {
-    "nelemx" : 100,
-    "nelemy" : 120,
-    "nnodesx" : 51,
-    "nnodesy" : 61,
-    "nelem" : 6000,
-    "h" : 1,
+    "nelemx" : 6,
+    "nelemy" : 6,
+    "nnodesx" : 4,
+    "nnodesy" : 4,
+    "nelem" : 18,
+    "h" : 3,
     "b" : 3,    
     "E" : 1,
     "v" : 0.3,
@@ -26,6 +26,6 @@
             "iy" : [1, 1, 1, 1]
         }],
 
-    "nodesNumber": 3111
+    "nodesNumber": 16
 
 }

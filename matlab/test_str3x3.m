@@ -10,6 +10,7 @@ prnt = 2000;
 opfil = 1;
 rmin = 1.5;
 [xstar,u,itotal,itotalint,f0val,time] = test_structures(str,x0,xmin,delta,frmax,prnt,opfil,rmin);
+xstar
 
 
 
