@@ -15,29 +15,33 @@ import time as tm
 wn.filterwarnings("ignore")
 
 set_printoptions(threshold=inf)
-struct = pd.read_json("./python/triangularElements/struct3x3.json")
+struct = pd.read_json("./python/triangularElements/str3x3.json")
 
 
 start = tm.time()
 row, col, inic = get_rows_cols(struct)
+print(row)
+print()
+print(col)
 # print(inic)
-
+#print(col)
 pos = get_pos(struct, inic)
-
+print()
+print(pos)
 # print(pos.shape)
 # print(pos)
 
-row = row - 1
-col = col - 1
-pos = pos - 1
+#row = row - 1
+#col = col - 1
+#pos = pos - 1
 
-kOdd, kEven = elem_stiff(struct)
+#kOdd, kEven = elem_stiff(struct)
 
-kOddc = ravel(kOdd)
-kEvenc = ravel(kEven)
+#kOddc = ravel(kOdd)
+#kEvenc = ravel(kEven)
 
 
-K = global_stiff(struct, ones(int(struct.nelem)), 1, row, col, inic, kEvenc, kOddc, pos )
+# K = global_stiff(struct, ones(int(struct.nelem)), 1, row, col, inic, kEvenc, kOddc, pos )
 
 end = tm.time()
 

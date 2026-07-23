@@ -6,7 +6,6 @@ from put_supports import put_supports
 from vetfneq import vetfneq
 from numpy import ravel
 from numpy import ones
-from numpy import reshape
 from numpy import arange
 from numpy import meshgrid
 from numpy import array
@@ -18,7 +17,8 @@ import pandas as pd
 import warnings as wn
 import matplotlib.pyplot as plt
 import matplotlib.tri as tri
-
+from grad_compliance import grad_compliance
+from time import time
 wn.filterwarnings("ignore")
 # def obj(x):
 
@@ -48,21 +48,33 @@ def sqpStruct(struct,density,minDens,penal, volfrac):
     supp = put_supports(struct)
     supp = supp - 1
 
+
+
     def obj(x):
+        start = time()
         K = global_stiff(struct, x, penal, row, col, inic, kEvenc, kOddc, pos)
+        end = time()
+        print(end - start)
 
         ap = identity(2*int(struct.nodesNumber)).tocsr()
 
         K[supp, :] = ap[supp, :]
         K[:, supp] = ap[:, supp]
+        
+        start = time()
+        u, info = cg(K, f , rtol = 1e-3 )
 
-        u, shape = cg(K, f)
+        end = time()
+        print(end - start)
+        print(u, info)
 
-        return f @ u
+        compliance = grad_compliance(struct, u, penal, x, kEven, kOdd)
+
+        return f @ u, compliance
     
     constraints = {
         'type': 'ineq',
-        'fun': lambda x: volMax - vElemArray @ x  # x.mean() <= volfrac
+        'fun': lambda x: volMax - vElemArray @ x  
     }
 
     lows = minDens*ones(int(struct.nelem))
@@ -71,13 +83,25 @@ def sqpStruct(struct,density,minDens,penal, volfrac):
     # bounds = Bounds(lb=full(struct.nelem, minDens), ub=ones(struct.nelem))
 
     # print(bounds)
-
+    def make_callback():
+        iter_count = [0]
+    
+        def callback(x):
+            iter_count[0] += 1
+            print(f"Iter {iter_count[0]}")
+    
+        return callback
+    
     result = minimize(obj , 
                       density, 
                       method='SLSQP', 
                       constraints= constraints, 
-                      bounds=bounds)
-    print(result)
+                      bounds=bounds, 
+                      options = {"maxiter" : 20},
+                      tol= 1e-3,
+                      jac = True, 
+                      callback=make_callback())
+    print(result, result.x)
     
     # print(volMax)
 
@@ -94,8 +118,8 @@ def sqpStruct(struct,density,minDens,penal, volfrac):
 
     triangles = []
 
-    for i in range(ny - 1):
-        for j in range(nx - 1):
+    for i in range(nx - 1):
+        for j in range(ny - 1):
 
             p0 = j * nx + i
             p1 = p0 + 1
@@ -130,7 +154,8 @@ def sqpStruct(struct,density,minDens,penal, volfrac):
     
 struct = pd.read_json("./python/triangularElements/struct3x3.json")
 
+
 # print(plt.colormaps)
-print(sqpStruct(struct, 0.4*ones(int(struct.nelem)), 0.001, 3, 0.4))
+print(sqpStruct(struct, 0.4*ones(int(struct.nelem)), 0.001, 1, 0.5))
 
 

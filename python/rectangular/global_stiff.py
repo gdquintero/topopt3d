@@ -1,13 +1,14 @@
 
 from scipy.sparse import csr_matrix
 from numpy import zeros
+from numpy import double
 
 def global_stiff(struct, density, penal, row, col, inic, kel, pos):
-    nodesx = int(struct.nnodesx)
-    nnodes = int(struct.nodesNumber)
-    nelemy = int(struct.nelemy)
+    nodesx = int(struct["nnodesx"])
+    nnodes = int(struct["nodesNumber"])
+    nelemy = int(struct["nelemy"])
 
-    kk = zeros(inic[-1])
+    kk = zeros(inic[-1], dtype=double)
 
     #Primmera columna
     kk[pos[0, :]] +=  density[0]**penal * kel

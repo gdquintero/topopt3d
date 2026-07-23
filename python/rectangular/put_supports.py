@@ -1,15 +1,17 @@
 from numpy import zeros
-
+from numpy import double
 def put_supports(struct):
-    linap = zeros(2*len(struct.supp[0]["node"]))
+    structSupp = struct["supp"][0]
+    linap = zeros(2*len(structSupp["node"]), dtype = double)
     counter = 0
-
-    for i in range(len(struct.supp[0]["node"])):
-        if struct.supp[0]["ix"][i] == 1:
-            linap[counter] = 2*struct.supp[0]["node"][i] - 1
+    suppix = structSupp["ix"]
+    suppiy = structSupp["iy"]
+    for i in range(len(structSupp["node"])):
+        if suppix[i] == 1:
+            linap[counter] = 2*structSupp["node"][i] - 1
             counter += 1
-        if struct.supp[0]["iy"][i] == 1:
-            linap[counter] = 2*struct.supp[0]["node"][i] 
+        if suppiy[i] == 1:
+            linap[counter] = 2*structSupp["node"][i] 
             counter += 1
     return linap
 

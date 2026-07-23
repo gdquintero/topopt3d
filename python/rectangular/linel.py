@@ -2,12 +2,13 @@ from numpy import zeros
 from numpy import floor
 
 def linel(struct):
-    ny = int(struct.nnodesy)
+    ny = int(struct["nnodesy"])
+    nelem = int(struct["nelem"])
     k = ny - 1
 
-    lin = zeros((8, int(struct.nelem)), dtype=int)
+    lin = zeros((8, nelem), dtype=int)
 
-    for i in range(1, int(struct.nelem) + 1):
+    for i in range(1, nelem + 1):
          node = (floor((i-1)/k))*ny+((i-1) % k)+1
          lin[1, i - 1] =  2*node
          lin[0, i - 1] = lin[1, i - 1] - 1

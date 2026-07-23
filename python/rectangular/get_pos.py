@@ -1,10 +1,10 @@
 import numpy as np
 
 def get_pos(struct, inic):
-    nelem = int(struct.nelem)
-    nelemy = int(struct.nelemy)
-    nodesy = int(struct.nnodesy)
-    nodesx = int(struct.nnodesx)
+    nelem = int(struct["nelem"])
+    nelemy = int(struct["nelemy"])
+    nodesy = int(struct["nnodesy"])
+    nodesx = int(struct["nnodesx"])
 
     pos = np.zeros((nelem, 64), dtype=int)
     # posOdd = np.zeros(inic[-1])

@@ -1,9 +1,9 @@
 {
-    "nelemx" : 200,
-    "nelemy" : 50,
-    "nnodesx" : 101,
-    "nnodesy" : 26,
-    "nelem" : 5000,
+    "nelemx" : 6,
+    "nelemy" : 6,
+    "nnodesx" : 4,
+    "nnodesy" : 4,
+    "nelem" : 18,
     "h" : 25,
     "b" : 100,    
     "E" : 3000000000,
@@ -26,6 +26,6 @@
             "iy" : [1, 1 ,1, 1 ,1, 1 ,1, 1 ,1, 1 ,1, 1, 1, 1 ,1, 1, 1, 1 ,1, 1 ,1, 1 ,1, 1 ,1, 1]
         }],
 
-    "nodesNumber": 2626
+    "nodesNumber": 16
 
 }

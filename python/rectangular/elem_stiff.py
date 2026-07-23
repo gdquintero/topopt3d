@@ -2,11 +2,16 @@ import numpy as np
 
 def elem_stiff(struct):
 
-    nu = struct.v
-    E1 = struct.E / (1 - nu**2)
-    be2 = 0.5 * (struct.b / struct.nelemx)
-    he2 = 0.5 * (struct.h / struct.nelemy)
-    tck = struct.e
+    b = float(struct["b"])
+    h = float(struct["h"])
+    nelemx = float(struct["nelemx"])
+    nelemy = float(struct["nelemy"])
+    E = float(struct["E"])
+    nu = float(struct["v"])
+    E1 = E / (1 - nu**2)
+    be2 = 0.5 * (b / nelemx)
+    he2 = 0.5 * (h / nelemy)
+    tck = float(struct["e"])
     E1tck = E1 * tck
     abe = be2 * he2 * tck
 
@@ -91,6 +96,6 @@ def elem_stiff(struct):
         [kel0_61, kel0_62, kel0_63, kel0_64, kel0_65, kel0_66, kel0_67, kel0_68],
         [kel0_71, kel0_72, kel0_73, kel0_74, kel0_75, kel0_76, kel0_77, kel0_78],
         [kel0_81, kel0_82, kel0_83, kel0_84, kel0_85, kel0_86, kel0_87, kel0_88]
-    ])
+    ], dtype= np.double)
 
     return kel0

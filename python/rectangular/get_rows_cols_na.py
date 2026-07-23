@@ -3,9 +3,9 @@ from numpy import array
 from numpy import concatenate
 
 def get_rows_cols(struct):
-    ny = int(struct.nnodesy)
-    nx = int(struct.nnodesx)
-    ncol = int(2*struct.nodesNumber)
+    ny = int(struct["nnodesy"])
+    nx = int(struct["nnodesx"])
+    ncol = int(2*struct["nodesNumber"])
     inic = zeros(ncol + 1, dtype= int)
     nelmat = 64 + (ny - 2)*48 + (nx - 2)*48 + 36*(ny - 2)*(nx - 2)
     row = zeros(nelmat)
