@@ -15,7 +15,7 @@ if (opfil == 1 || opfil == 2)
          if (p < pmax) 
             maxit = 50;
          else
-            maxit = 5000;
+            maxit = 100;
          end
          [xstar,u,iter,itint,f0val,beta,time] = linseq_struct(str,xstar,xmin,p,delta,frmax,tol,maxit,prnt,opfil,rmin,beta);
          p = p + deltap;

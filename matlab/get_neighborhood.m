@@ -73,6 +73,7 @@ if (opfil == 1 || opfil == 2) %Mean density filter (opfil == 1), Sinh filter (op
            end
        end
    end
+   disp(distviz)
    [weigh,wi] = weight(str,rmin,nonempty,kmax2,numviz,distviz);
    gradxnew = graddens(str,N,weigh,wi,nonempty,kmax2,numviz);
 end
