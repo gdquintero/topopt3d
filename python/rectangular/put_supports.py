@@ -2,7 +2,7 @@ from numpy import zeros
 from numpy import double
 def put_supports(struct):
     structSupp = struct["supp"][0]
-    linap = zeros(2*len(structSupp["node"]), dtype = double)
+    linap = zeros(2*len(structSupp["node"]), dtype = int)
     counter = 0
     suppix = structSupp["ix"]
     suppiy = structSupp["iy"]

@@ -1,9 +1,9 @@
 {
-    "nelemx" : 100,
-    "nelemy" : 25,
+    "nelemx" : 200,
+    "nelemy" : 50,
     "nnodesx" : 101,
     "nnodesy" : 26,
-    "nelem" : 2500,
+    "nelem" : 5000,
     "h" : 25,
     "b" : 100,    
     "E" : 300000,

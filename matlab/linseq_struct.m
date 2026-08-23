@@ -340,7 +340,7 @@ while ( (gpnorm > tol) && (count < tolcount) && (iter <= maxit) )
             get_picture(xnew,str.nely,str.nelx);
             pause(1e-6);
          end
-         if (iprn==0),
+         if (iprn==0)
             disp([]);
             disp(' iter       ||s||          gpnorm         delta           f0val           ared            pred            fracvol        volume    flagn  flagtg');
             disp('----- --------------- --------------- --------------- --------------- --------------- --------------- --------------- ------------ -----  ------');

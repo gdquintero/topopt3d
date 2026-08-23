@@ -6,17 +6,18 @@ from pyinstrument import Profiler
 # --- Librerías de terceros ---
 import pandas as pd
 import matplotlib.pyplot as plt
-from numpy import ravel, ones, double, reshape, zeros
-from scipy.sparse import identity, diags
+from numpy import ravel, ones, double, reshape, zeros, diag
+# from scipy.sparse import identity, diags
+from numpy import identity
 from scipy.sparse.linalg import cg, LinearOperator, spilu
+# from scipy.sparse import diags
 from scipy.optimize import minimize
 from sqpSolver import sqp_diagonal as diagonal_sqp
-# from MMASolver import mma_method
 # --- Módulos propios ---
 from elem_stiff import elem_stiff
 from get_pos import get_pos
 from get_rows_cols_na import get_rows_cols
-from global_stiff import global_stiff
+from global_stiff_tradv2 import global_stiff_tradv2
 from put_supports import put_supports
 from vetfneq import vetfneq
 from grad_compliance import grad_compliance
@@ -25,9 +26,6 @@ from weight import weight
 from mean_density_filter import mean_density_filter
 from graddens import graddens
 from grad_compliance_filter import grad_compliance_filter
-import numpy 
-import sys
-# numpy.set_printoptions(threshold=sys.maxsize)
 wn.filterwarnings("ignore")
 
 
@@ -42,10 +40,10 @@ def sqpStruct(struct,density,minDens,penal, volfrac, rmin):
 
     row, col, inic = get_rows_cols(struct)
     pos = get_pos(struct, inic)
-    row = row - 1
-    col = col - 1
-    pos = pos - 1
-    kelc = ravel(kel)
+    # row = row - 1
+    # col = col - 1
+    # pos = pos - 1
+    kelc = kel
     volS = b*h*e
     vElem = volS / nelem
     vElemArray = vElem * ones(nelem)
@@ -56,13 +54,12 @@ def sqpStruct(struct,density,minDens,penal, volfrac, rmin):
     # volfrac = velem/volS
 
     f = vetfneq(struct)
-    # print(f)
     supp = put_supports(struct)
     supp = supp - 1
     numNei, neighbsEl, distnei = get_neighborhood(struct, rmin)
     weigh, wi = weight(struct, rmin, numNei, distnei)
     gradxnew = graddens(struct, weigh, wi, numNei, neighbsEl)
-    ap = identity(2*int(struct["nodesNumber"]), dtype = double).tocsr()
+    ap = identity(2*int(struct["nodesNumber"]), dtype = double)
 
     obj_time = 0.0
     obj_calls = 0
@@ -72,9 +69,11 @@ def sqpStruct(struct,density,minDens,penal, volfrac, rmin):
         # print(u0)
         t0 = time.perf_counter()
         xvol = mean_density_filter(struct, x, weigh, wi, numNei, neighbsEl)
+        # xvol = x
         #x = xvol
         start = time.time()
-        K = global_stiff(struct, xvol, penal, row, col, inic, kelc, pos)
+        # global_stiff_tradv2()
+        K = global_stiff_tradv2(struct, kel, xvol, penal)
         end = time.time()
         print(f"rigidez: {end - start}")
 
@@ -82,6 +81,7 @@ def sqpStruct(struct,density,minDens,penal, volfrac, rmin):
         # start = time.time()
         K[supp, :] = ap[supp, :]
         K[:, supp] = ap[:, supp]
+        # D = diags(K.diagonal())
         # end = time.time()
         # print(end - start)
 
@@ -89,15 +89,17 @@ def sqpStruct(struct,density,minDens,penal, volfrac, rmin):
         # K = K.astype(float32)
         
         # ilu = spilu(K.tocsc(), fill_factor=10, drop_tol=1e-4)
-        # M = LinearOperator(K.shape, ilu.solve)
-        # diago = K.diagonal
+        # diago = diag(K)
         # M = LinearOperator(
-        #             K.shape,
-        #             matvec=lambda x: x / diago
-        #         )
-        M = diags(1.0 / K.diagonal())
+        #     K.shape,
+        #     matvec=lambda x: x / diago
+        # )
+
+        M = diag(1.0 / diag(K))
+        # print(M)
+        # M = diags(K.diagonal()).tocsr()
         start = time.time()
-        u, info = cg(K, f, M = M, rtol = 1e-3, maxiter = 2*int(struct["nodesNumber"]), x0 = u0)
+        u, info = cg(K, f, M= M, rtol = 1e-3, maxiter = 2*int(struct["nodesNumber"]), x0 = u0)
         u0 = u
         end = time.time()
         print(f"sistema: {end - start}")
@@ -175,21 +177,10 @@ def sqpStruct(struct,density,minDens,penal, volfrac, rmin):
                       method= diagonal_sqp, 
                       constraints= constraints, 
                       bounds=bounds,
-                      options = {'maxiter': 400, 'disp' : True, "warm_start": True, "sparse_P" : True, "qp_solver" :"osqp"},
+                      options = {'maxiter': 400, 'disp' : True, "warm_start": True,  "qp_solver" :"osqp"},
                     #   verbose = True,
                       tol= 1e-3,
                       jac= True,)
-
-
-    # result = minimize(obj , 
-    #                   density, 
-    #                   method= mma_method, 
-    #                   constraints= constraints, 
-    #                   bounds=bounds,
-    #                   options = {'maxiter': 200, 'disp' : True},
-    #                 #   verbose = True,
-    #                   tol= 1e-3,
-    #                   jac= True,)
                     #   callback= make_callback())
 
     end = time.perf_counter()
@@ -204,15 +195,15 @@ def sqpStruct(struct,density,minDens,penal, volfrac, rmin):
     # print(result)
     R = -reshape(densityStar, (int(struct["nelemx"]), int(struct["nelemy"]))).T
     
-    # for i in range(R.shape[0] + 1):
-    #     plt.axhline(i - 0.5, color='black', linewidth=0.5)
+    for i in range(R.shape[0] + 1):
+        plt.axhline(i - 0.5, color='black', linewidth=0.5)
 
-    # for j in range(R.shape[1] + 1):
-    #     plt.axvline(j - 0.5, color='black', linewidth=0.5)
+    for j in range(R.shape[1] + 1):
+        plt.axvline(j - 0.5, color='black', linewidth=0.5)
         
     plt.set_cmap('gray')
     plt.imshow(R, origin= "lower", vmax = -0.001)
-    # plt.colorbar()
+    plt.colorbar()
     plt.show()
     print("obj:", obj_calls, obj_time)
     print("con:", con_calls, con_time)

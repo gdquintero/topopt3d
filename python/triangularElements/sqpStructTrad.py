@@ -7,17 +7,18 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib.tri as tri
 from numpy import (
-    ravel, ones, arange, meshgrid, array, zeros, double
+    ravel, ones, arange, meshgrid, array, zeros, double, identity, diag
 )
-from scipy.sparse import identity, diags
+# from scipy.sparse import identity, diags
 from scipy.sparse.linalg import cg
 from scipy.optimize import minimize
 
 # --- Módulos locales / propios del proyecto ---
 from elem_stiff import elem_stiff
 from get_pos import get_pos
-from get_rows_cols import get_rows_cols
-from global_stiff import global_stiff
+# from get_rows_cols import get_rows_cols
+# from global_stiff import global_stiff
+from global_stiff_trad import global_stiff_trad
 from put_supports import put_supports
 from vetfneq import vetfneq
 from get_neighborhoodTrad import get_neighborhoodTrad
@@ -42,13 +43,13 @@ def sqpStruct(struct,density,minDens,penal, volfrac, rmin):
     h = float(struct["h"])
     e = float(struct["e"])
     # print(kOdd, kEven)
-    row, col, inic = get_rows_cols(struct)
-    pos = get_pos(struct, inic)
-    row = row - 1
-    col = col - 1
-    pos = pos - 1
-    kOddc = ravel(kOdd)
-    kEvenc = ravel(kEven)
+    # row, col, inic = get_rows_cols(struct)
+    # pos = get_pos(struct, inic)
+    # row = row - 1
+    # col = col - 1
+    # pos = pos - 1
+    # kOddc = ravel(kOdd)
+    # kEvenc = ravel(kEven)
     volS = b*h*e
     vElem = volS / nelem
     vElemArray = vElem * ones(int(nelem))
@@ -62,7 +63,7 @@ def sqpStruct(struct,density,minDens,penal, volfrac, rmin):
     numNei, neighbsEl, distnei = get_neighborhoodTrad(struct, rmin)
     weigh, wi = weight(struct, rmin, numNei, distnei)
     gradxnew = graddens(struct, weigh, wi, numNei, neighbsEl)
-    ap = identity(2*int(struct["nodesNumber"]), dtype =double).tocsr()
+    ap = identity(2*int(struct["nodesNumber"]), dtype =double)
     
 
     u0 = zeros(2*int(struct["nodesNumber"]))
@@ -71,14 +72,14 @@ def sqpStruct(struct,density,minDens,penal, volfrac, rmin):
         xvol = mean_density_filter(struct, x, weigh, wi, numNei, neighbsEl)
 
         start = time()
-        K = global_stiff(struct, xvol, penal, row, col, inic, kEvenc, kOddc, pos)
+        K = global_stiff_trad(struct,  kEven, kOdd, xvol, penal)
         end = time()
         print(f"Rigidez : {end - start}")
 
 
         K[supp, :] = ap[supp, :]
         K[:, supp] = ap[:, supp]
-        M = diags(1.0 / K.diagonal())
+        M = diag(1.0 / diag(K))
         start = time()
         u, info = cg(K, f , M = M, rtol = 1e-3, maxiter = 2*int(struct["nodesNumber"]), x0 = u0 )
         u0 = u
@@ -139,7 +140,7 @@ def sqpStruct(struct,density,minDens,penal, volfrac, rmin):
                       method=sqp_diagonal, 
                       constraints= constraints, 
                       bounds=bounds, 
-                      options = {'maxiter': 400, 'disp' : True, "warm_start": True, "sparse_P" : True, "qp_solver" :"osqp"},
+                      options = {'maxiter': 400, 'disp' : True, "warm_start": True, "qp_solver" :"osqp"},
                       tol= 1e-3,
                       jac = True,) 
                     #   callback=make_callback())

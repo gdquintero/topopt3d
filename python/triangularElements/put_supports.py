@@ -1,7 +1,7 @@
 from numpy import zeros
 
 def put_supports(struct):
-    linap = zeros(2*len(struct.supp[0]["node"]))
+    linap = zeros(2*len(struct.supp[0]["node"]), dtype = int)
     counter = 0
 
     for i in range(len(struct.supp[0]["node"])):

@@ -1,7 +1,7 @@
-# import pandas as pd
+import pandas as pd
 # from weight import weight
 from numpy import floor, zeros, sqrt
-# struct = pd.read_json("./python/rectangular/struct5x4.json")
+struct = pd.read_json("./python/rectangular/struct4x4.json")
 
 def get_neighborhood(struct, rmin):
     rminf = int(floor(rmin))
@@ -34,7 +34,7 @@ def get_neighborhood(struct, rmin):
     # weigh, wi = weight(struct, rmin, numNei, distnei)
     return numNei, neighbsEl, distnei
 
-# numNei, neighbsEl, weigh, wi = get_neighborhood(struct, 1)
+# numNei, neighbsEl, distnei = get_neighborhood(struct, 1)
 # print(numNei)
 # print("")
 # print(neighbsEl)

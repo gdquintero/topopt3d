@@ -66,6 +66,7 @@ if (opfil == 1 || opfil == 2) %Mean density filter (opfil == 1), Sinh filter (op
                          ind = ind + 1;
                          N(ind,m1) = m2;
                          distviz(ind,m1) = sqrt((i-k)^2+(j-l)^2);
+                         disp(distviz(ind, m1))
                       end
                   end
               end

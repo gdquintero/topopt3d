@@ -14,9 +14,6 @@ def graddens(struct, weigh, wi, numNei, elnei):
         nei = numNei[i - 1]
         ind = elnei[0:nei, i -1]
         val = weigh[i - 1, 0:nei]/wi[ind - 1]
-        # print(val)
-        # if val == 0: continue
-
         col = [*col, *(ind - 1)]
         row = [*row, *((i-1)*ones(len(ind)))]
         data = [*data, *val]
